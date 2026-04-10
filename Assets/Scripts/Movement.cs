@@ -8,13 +8,13 @@ public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [Tooltip("Maximum movement speed in units/second.")]
-    public float maxSpeed = 5f;
+    public float maxSpeed = 0.5f;
 
     [Tooltip("Acceleration rate (units/second^2) while input is held.")]
-    public float acceleration = 40f;
+    public float acceleration = 4f;
 
     [Tooltip("Deceleration rate (units/second^2) when input is released.")]
-    public float deceleration = 60f;
+    public float deceleration = 6f;
 
     // Internal state
     private Rigidbody2D _rb;
