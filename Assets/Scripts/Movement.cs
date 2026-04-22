@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 #endif
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class Movement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -23,6 +24,12 @@ public class Movement : MonoBehaviour
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+
+        // Ensure Rigidbody is configured for top-down physics
+        _rb.gravityScale = 0f;
+        _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        _rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     void FixedUpdate()
@@ -69,5 +76,18 @@ public class Movement : MonoBehaviour
 
         // Apply velocity to Rigidbody2D
         _rb.linearVelocity = _velocity;
+    }
+
+    /// <summary>
+    /// Called when the fish hits another collider. 
+    /// This ensures we get a clean stop or response when bumping into things.
+    /// </summary>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Reset velocity on impact to prevent "sticky" or "pushing" behavior against walls
+        _velocity = Vector2.zero;
+        _rb.linearVelocity = Vector2.zero;
+        
+        Debug.Log($"Honu hit: {collision.gameObject.name}");
     }
 }
